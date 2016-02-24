@@ -106,7 +106,7 @@
 {
     __block NSMutableArray *modelArray = [@[] mutableCopy];
     [self inDatabase:^(FMDatabase *db) {
-        NSDictionary *mapping = @{};
+        NSDictionary *mapping = nil;
         FMResultSet *rs = [db executeQuery:sql withArgumentsInArray:param];
         while ([rs next]) {
             id model = [[modelClass alloc] init];
@@ -114,7 +114,7 @@
                 mapping = [model fmdbPropertyMapping];
             }
             
-            for (int i = 0; [rs columnCount]; i++) {
+            for (int i = 0; i < [rs columnCount]; i++) {
                 // 获取数据库中列名
                 NSString *columnName = [rs columnNameForIndex:i];
                 NSString *propertyName;
