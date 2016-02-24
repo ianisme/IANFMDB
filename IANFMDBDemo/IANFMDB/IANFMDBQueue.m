@@ -17,6 +17,57 @@
     return [super initWithPath:aPath];
 }
 
+- (instancetype)initWithdbName:(NSString *)dbName
+{
+    NSString *aPath = [self getDataBaseFilePath:dbName];
+    return [self initWithPath:aPath];
+}
+
+- (BOOL)executeCreateTableName:(NSString *)tableName listParam:(NSDictionary *)listParam
+{
+    NSString *sqlStr = [NSString stringWithFormat:@"SELECT count(*) as countNum FROM sqlite_master WHERE type ='table' and name = ?"];
+
+    __block BOOL result = NO;
+    [self inDatabase:^(FMDatabase *db) {
+        FMResultSet *rs = [db executeQuery:sqlStr,tableName];
+        if ([rs next]) {
+            NSInteger count = [rs intForColumn:@"countNum"];
+            if (count == 1) {
+                NSLog(@"%@数据表已存在，不需要创建",tableName);
+                [rs close];
+                result = NO;
+            } else {
+                //创建表
+                if (tableName == nil || listParam == nil) {
+                    return;
+                }
+                NSString *sqlString = @"create table ";
+                sqlString = [sqlString stringByAppendingString:tableName];
+                sqlString = [sqlString stringByAppendingString:@" (id INTEGER PRIMARY KEY AUTOINCREMENT"];
+                
+                NSString *columnString = @"";
+                for (int i = 0; i < listParam.allKeys.count; i ++) {
+                    NSString *seperator = sqlString.length < 1 ? @"" : @", ";
+                    NSString *key = [listParam.allKeys objectAtIndex:i];
+                    NSString *value = listParam[key];
+                    NSString *keyAndValueStr = [NSString stringWithFormat:@"%@ %@",key,value];
+                    
+                    columnString = [[columnString stringByAppendingString:seperator] stringByAppendingString:keyAndValueStr];
+                }
+                
+                sqlString = [sqlString stringByAppendingString:columnString];
+                sqlString = [sqlString stringByAppendingString:@")"];
+                
+                result = [db executeUpdate:sqlString];
+            }
+        }
+        [rs close];
+        
+    }];
+    
+    return result;
+}
+
 - (BOOL)executeUpdate:(NSString *)sql param:(NSArray *)param
 {
     __block BOOL result = NO;
@@ -41,6 +92,7 @@
         } else {
             count = @0;
         }
+        [rs close];
     }];
     return count.integerValue;
 }
@@ -350,8 +402,5 @@
     
     return sqlString;
 }
-
-
-
 
 @end

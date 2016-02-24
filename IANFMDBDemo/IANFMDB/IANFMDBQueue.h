@@ -10,8 +10,14 @@
 
 @interface IANFMDBQueue : FMDatabaseQueue
 
-// 初始化
+// 通过路径初始化(有则创建，无则获取)
 - (instancetype)initWithPath:(NSString *)aPath;
+
+// 通过数据库的名字初始化 例如：cangteacher.db
+- (instancetype)initWithdbName:(NSString *)dbName;
+
+// 在对应数据库中创建新表
+- (BOOL)executeCreateTableName:(NSString *)tableName listParam:(NSDictionary *)listParam;
 
 // 更新数据
 - (BOOL)executeUpdate:(NSString *)sql param:(NSArray *)param;
