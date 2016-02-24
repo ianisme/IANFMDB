@@ -67,8 +67,20 @@
  */
 - (NSArray *)executeQuery:(NSString *)sql withArgumentInArray:param modelClass:(Class)modelClass;
 
-// 返回指定Class的结果数组，并执行自定义操作
+/**
+ *  返回指定Class的结果数组，并执行自定义操作
+ *
+ *  @param sql        sql语句
+ *  @param param      参数
+ *  @param modelClass model类型
+ *  @param handle     自定义事件
+ *
+ *  @return 数组
+ */
 - (NSArray *)executeQuery:(NSString *)sql withArgumentInArray:(id)param modelClass:(Class)modelClass handle:(void(^)(id model, FMResultSet *rs))handle;
+
+// 清除数据库中重复的数据
+- (BOOL)executeCleanRepeatData:(NSString *)tableName columnName:(NSString *)columnName;
 
 // 增加
 - (BOOL)executeInsertTableName:(NSString *)tableName mapValueParam:(NSDictionary *)mapValueParam;

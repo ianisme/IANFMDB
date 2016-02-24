@@ -32,7 +32,7 @@
         FMResultSet *rs = [db executeQuery:sqlStr,tableName];
         if ([rs next]) {
             NSInteger count = [rs intForColumn:@"countNum"];
-            if (count == 1) {
+            if (count >= 1) {
                 NSLog(@"%@数据表已存在，不需要创建",tableName);
                 [rs close];
                 result = NO;
@@ -41,7 +41,7 @@
                 if (tableName == nil || listParam == nil) {
                     return;
                 }
-                NSString *sqlString = @"create table ";
+                NSString *sqlString = @"CREATE TABLE ";
                 sqlString = [sqlString stringByAppendingString:tableName];
                 sqlString = [sqlString stringByAppendingString:@" (id INTEGER PRIMARY KEY AUTOINCREMENT"];
                 
@@ -147,6 +147,12 @@
         [rs close];
     }];
     return modelArray;
+}
+
+- (BOOL)executeCleanRepeatData:(NSString *)tableName columnName:(NSString *)columnName
+{
+    NSString *sqlString = [NSString stringWithFormat:@"delete from %@ where %@ in (select %@ from %@ group by %@ having count(%@)>1) and id not in (select min(id) from %@ group by %@ having count(%@)>1)", tableName, columnName, columnName, tableName, columnName, columnName, tableName, columnName, columnName];
+    return [self executeUpdate:sqlString param:nil];
 }
 
 - (BOOL)executeInsertTableName:(NSString *)tableName mapValueParam:(NSDictionary *)mapValueParam;
@@ -258,7 +264,7 @@
     if (tableName == nil || mapValueParam == nil) {
         return nil;
     }
-    NSString *sqlString = @"insert into ";
+    NSString *sqlString = @"INSERT OR IGNORE INTO ";
     sqlString = [sqlString stringByAppendingString:tableName];
     sqlString = [sqlString stringByAppendingString:@" ("];
     
@@ -278,7 +284,7 @@
     }
     
     sqlString = [sqlString stringByAppendingString:keyString];
-    sqlString = [sqlString stringByAppendingString:@") values ("];
+    sqlString = [sqlString stringByAppendingString:@") VALUES ("];
     sqlString = [sqlString stringByAppendingString:valueString];
     sqlString = [sqlString stringByAppendingString:@")"];
     
@@ -294,13 +300,13 @@
         return nil;
     }
     
-    NSString *sqlString = @"delete from ";
+    NSString *sqlString = @"DELETE FROM ";
     sqlString = [sqlString stringByAppendingString:tableName];
     
     if (mapCondition == nil || mapCondition.count <= 0) {
         return sqlString;
     }
-    sqlString = [sqlString stringByAppendingString:@" where "];
+    sqlString = [sqlString stringByAppendingString:@" WHERE "];
     
     NSString *conditions = @"";
     
@@ -308,7 +314,7 @@
         
         NSString *key = [mapCondition.allKeys objectAtIndex:j];
         NSString *value = [mapCondition objectForKey:key];
-        NSString *seperator = conditions.length < 1 ? @"" : @" and ";
+        NSString *seperator = conditions.length < 1 ? @"" : @" AND ";
         conditions = [[[[conditions stringByAppendingString:seperator] stringByAppendingString:key] stringByAppendingString:@"="] stringByAppendingString:value];
     }
     
@@ -323,9 +329,9 @@
         return nil;
     }
     
-    NSString *sqlString = @"update ";
+    NSString *sqlString = @"UPDATE ";
     sqlString = [sqlString stringByAppendingString:tableName];
-    sqlString = [sqlString stringByAppendingString:@" set"];
+    sqlString = [sqlString stringByAppendingString:@" SET"];
     
     NSString *fields = @"";
     for (int i = 0; i<mapValueParam.allKeys.count; i++) {
@@ -343,7 +349,7 @@
     if (mapCondition == nil || [mapCondition count] <= 0) {
         return sqlString;
     }
-    sqlString = [sqlString stringByAppendingString:@" where "];
+    sqlString = [sqlString stringByAppendingString:@" WHERE "];
     
     NSString *conditions = @"";
     
@@ -352,7 +358,7 @@
         NSString *key = [mapCondition.allKeys objectAtIndex:j];
         NSString *value = [mapCondition objectForKey:key];
         
-        NSString *seperator = conditions.length < 1 ? @"" : @" and ";
+        NSString *seperator = conditions.length < 1 ? @"" : @" AND ";
         
         conditions = [[[[conditions stringByAppendingString:seperator] stringByAppendingString:key] stringByAppendingString:@"="] stringByAppendingString:value];
     }
@@ -367,7 +373,7 @@
     if (tableName == nil) {
         return nil;
     }
-    NSString *sqlString = @"select";
+    NSString *sqlString = @"SELECT";
     NSString *fields = @"";
     
     if (columnList == nil || columnList.count <= 0) {
@@ -381,20 +387,20 @@
     }
     
     sqlString = [sqlString stringByAppendingString:fields];
-    sqlString = [sqlString stringByAppendingString:@"from "];
+    sqlString = [sqlString stringByAppendingString:@"FROM "];
     sqlString = [sqlString stringByAppendingString:tableName];
     
     if (mapCondition == nil || mapCondition.count <= 0) {
         return sqlString;
     }
-    sqlString = [sqlString stringByAppendingString:@" where "];
+    sqlString = [sqlString stringByAppendingString:@" WHERE "];
     NSString *conditions = @"";
     
     for (int i = 0; i < mapCondition.allKeys.count; i ++) {
         NSString *key = [[mapCondition allKeys] objectAtIndex:i];
         NSString *value = mapCondition[key];
         
-        NSString *seperator = conditions.length < 1 ? @" " : @" and ";
+        NSString *seperator = conditions.length < 1 ? @" " : @" AND ";
         conditions = [[[[conditions stringByAppendingString:seperator] stringByAppendingString:key] stringByAppendingString:@"="] stringByAppendingString:value];
     }
     

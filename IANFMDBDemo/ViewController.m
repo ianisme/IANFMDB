@@ -26,35 +26,42 @@
     NSLog(@"%@",dbPath);
     _queue = [[IANFMDBQueue alloc] initWithPath:dbPath];
     
-//    BOOL isSuccess;
-//    isSuccess = [_queue executeCreateTableName:@"Person" listParam:@{
-//                                                         @"name_sql" : @"TEXT",
-//                                                         @"gender_sql" : @"TEXT",
-//                                                         @"age_sql" : @"INTEGER",
-//                                                         @"weight_sql" : @"REAL",
-//                                                         @"height_sql" : @"REAL",
-//                                                         @"married_sql" : @"INTEGER",
-//                                                         }];
-//    
-//    NSLog(@"%@", isSuccess ? @"表创建成功" : @"");
-//    
-//    isSuccess = [_queue executeInsertTableName:@"Person" mapValueParam:@{
-//                                                             @"name_sql" : @"苍井空",
-//                                                             @"gender_sql" : @"male",
-//                                                             @"age_sql" : @70,
-//                                                             @"weight_sql" : @175l,
-//                                                             @"height_sql" : @22,
-//                                                             @"married_sql" : @1
-//                                                             }];
-//    NSLog(@"%@", isSuccess ? @"数据插入成功" : @"");
+    BOOL isSuccess;
+    isSuccess = [_queue executeCreateTableName:@"Person" listParam:@{
+                                                         @"name_sql" : @"TEXT",
+                                                         @"gender_sql" : @"TEXT",
+                                                         @"age_sql" : @"INTEGER",
+                                                         @"weight_sql" : @"REAL",
+                                                         @"height_sql" : @"REAL",
+                                                         @"married_sql" : @"INTEGER",
+                                                         }];
+    
+    NSLog(@"%@", isSuccess ? @"表创建成功" : @"");
+    
+
+    
+    isSuccess = [_queue executeInsertTableName:@"Person" mapValueParam:@{
+                                                             @"name_sql" : @"苍井空",
+                                                             @"gender_sql" : @"male",
+                                                             @"age_sql" : @90,
+                                                             @"weight_sql" : @175l,
+                                                             @"height_sql" : @22,
+                                                             @"married_sql" : @1
+                                                             }];
+    NSLog(@"%@", isSuccess ? @"数据插入成功" : @"");
     
     NSLog(@"%zd",[_queue dataRowCount:@"Person"]);
     
+    [_queue executeCleanRepeatData:@"Person" columnName:@"name_sql"];
+    
     NSString *sqlString = [_queue createSelectSQL:@"Person" columnList:nil mapCondition:nil];
     
-    NSArray *array = [_queue executeQuery:sqlString withArgumentInArray:nil modelClass:[Person class]];
+    NSArray *array = [_queue executeQuery:sqlString withArgumentInArray:nil modelClass:[Person class] handle:^(id model, FMResultSet *rs) {
+        NSLog(@"这是一个自定义事件");
+    }];
     
     NSLog(@"%@",array);
+
 
 }
 
