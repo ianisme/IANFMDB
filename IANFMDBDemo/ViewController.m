@@ -51,8 +51,7 @@
     NSLog(@"%@", isSuccess ? @"数据插入成功" : @"");
     
     NSLog(@"%zd",[_queue dataRowCount:@"Person"]);
-    
-    [_queue executeCleanRepeatData:@"Person" columnName:@"name_sql"];
+
     
     NSString *sqlString = [_queue createSelectSQL:@"Person" columnList:nil mapCondition:nil];
     

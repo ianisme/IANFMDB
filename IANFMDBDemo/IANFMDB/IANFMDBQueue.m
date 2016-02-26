@@ -264,7 +264,7 @@
     if (tableName == nil || mapValueParam == nil) {
         return nil;
     }
-    NSString *sqlString = @"INSERT OR IGNORE INTO ";
+    NSString *sqlString = @"INSERT INTO ";
     sqlString = [sqlString stringByAppendingString:tableName];
     sqlString = [sqlString stringByAppendingString:@" ("];
     
