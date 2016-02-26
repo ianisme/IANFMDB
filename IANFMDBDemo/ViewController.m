@@ -7,13 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "IANFMDBQueue.h"
+#import "TeacherSqliteManager.h"
 #import "Person.h"
 
 @interface ViewController ()
-{
-    IANFMDBQueue *_queue;
-}
+
 @end
 
 @implementation ViewController
@@ -24,10 +22,10 @@
     NSString *directory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
     NSString *dbPath = [directory stringByAppendingPathComponent:dbName];
     NSLog(@"%@",dbPath);
-    _queue = [[IANFMDBQueue alloc] initWithPath:dbPath];
+    [TeacherSqliteManager shareInstance].queue = [[IANFMDBQueue alloc] initWithPath:dbPath];
     
     BOOL isSuccess;
-    isSuccess = [_queue executeCreateTableName:@"Person" listParam:@{
+    isSuccess = [[TeacherSqliteManager shareInstance].queue executeCreateTableName:@"Person" listParam:@{
                                                          @"name_sql" : @"TEXT",
                                                          @"gender_sql" : @"TEXT",
                                                          @"age_sql" : @"INTEGER",
@@ -40,7 +38,7 @@
     
 
     
-    isSuccess = [_queue executeInsertTableName:@"Person" mapValueParam:@{
+    isSuccess = [[TeacherSqliteManager shareInstance].queue executeInsertTableName:@"Person" mapValueParam:@{
                                                              @"name_sql" : @"苍井空",
                                                              @"gender_sql" : @"male",
                                                              @"age_sql" : @90,
@@ -50,12 +48,12 @@
                                                              }];
     NSLog(@"%@", isSuccess ? @"数据插入成功" : @"");
     
-    NSLog(@"%zd",[_queue dataRowCount:@"Person"]);
+    NSLog(@"%zd",[[TeacherSqliteManager shareInstance].queue dataRowCount:@"Person"]);
 
     
-    NSString *sqlString = [_queue createSelectSQL:@"Person" columnList:nil mapCondition:nil];
+    NSString *sqlString = [[TeacherSqliteManager shareInstance].queue createSelectSQL:@"Person" columnList:nil mapCondition:nil];
     
-    NSArray *array = [_queue executeQuery:sqlString withArgumentInArray:nil modelClass:[Person class] handle:^(id model, FMResultSet *rs) {
+    NSArray *array = [[TeacherSqliteManager shareInstance].queue executeQuery:sqlString withArgumentInArray:nil modelClass:[Person class] handle:^(id model, FMResultSet *rs) {
         NSLog(@"这是一个自定义事件");
     }];
     

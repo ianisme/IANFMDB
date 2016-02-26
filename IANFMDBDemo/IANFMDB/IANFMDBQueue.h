@@ -82,7 +82,6 @@
 // 清除数据库中重复的数据
 - (BOOL)executeCleanRepeatData:(NSString *)tableName columnName:(NSString *)columnName;
 
-- (BOOL)executeCleanAllRepeatData:(NSString *)tableName;
 // 增加
 - (BOOL)executeInsertTableName:(NSString *)tableName mapValueParam:(NSDictionary *)mapValueParam;
 

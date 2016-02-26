@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C034CAA1C80431E006EC565 /* TeacherSqliteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C034CA91C80431E006EC565 /* TeacherSqliteManager.m */; };
 		3C065B601C7B513B004D1A16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C065B5F1C7B513B004D1A16 /* main.m */; };
 		3C065B631C7B513B004D1A16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C065B621C7B513B004D1A16 /* AppDelegate.m */; };
 		3C065B661C7B513B004D1A16 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C065B651C7B513B004D1A16 /* ViewController.m */; };
@@ -20,6 +21,8 @@
 
 /* Begin PBXFileReference section */
 		002824BD047A826A42CD3850 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C034CA81C80431E006EC565 /* TeacherSqliteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeacherSqliteManager.h; sourceTree = "<group>"; };
+		3C034CA91C80431E006EC565 /* TeacherSqliteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeacherSqliteManager.m; sourceTree = "<group>"; };
 		3C065B5B1C7B513B004D1A16 /* IANFMDBDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IANFMDBDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C065B5F1C7B513B004D1A16 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3C065B611C7B513B004D1A16 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -78,6 +81,8 @@
 				3C065B621C7B513B004D1A16 /* AppDelegate.m */,
 				3C065B641C7B513B004D1A16 /* ViewController.h */,
 				3C065B651C7B513B004D1A16 /* ViewController.m */,
+				3C034CA81C80431E006EC565 /* TeacherSqliteManager.h */,
+				3C034CA91C80431E006EC565 /* TeacherSqliteManager.m */,
 				3C065B671C7B513B004D1A16 /* Main.storyboard */,
 				3C065B6A1C7B513B004D1A16 /* Assets.xcassets */,
 				3C065B6C1C7B513B004D1A16 /* LaunchScreen.storyboard */,
@@ -256,6 +261,7 @@
 				3C065B631C7B513B004D1A16 /* AppDelegate.m in Sources */,
 				3C065B791C7B52BF004D1A16 /* Person.m in Sources */,
 				3C065B7E1C7B5784004D1A16 /* IANFMDBQueue.m in Sources */,
+				3C034CAA1C80431E006EC565 /* TeacherSqliteManager.m in Sources */,
 				3C065B601C7B513B004D1A16 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
